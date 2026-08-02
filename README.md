@@ -20,7 +20,7 @@ This application performs image processing tasks using OpenCV Haar Cascade Class
 
 ## 🏠 Home Page
 
-(Add your homepage screenshot here)
+<img src="screenshort/homepage.png" width="700">
 
 
 ---
@@ -29,7 +29,7 @@ This application performs image processing tasks using OpenCV Haar Cascade Class
 
 The system detects human faces from uploaded images.
 
-<img src="images/face.png" width="700">
+<img src="screenshort/face.png" width="700">
 
 
 ---
@@ -38,7 +38,7 @@ The system detects human faces from uploaded images.
 
 Detects eyes from the input image using OpenCV.
 
-<img src="images/eye.png" width="700">
+<img src="screenshort/eye.png" width="700">
 
 
 ---
@@ -47,7 +47,7 @@ Detects eyes from the input image using OpenCV.
 
 Detects smiles from human faces.
 
-<img src="images/smile.png" width="700">
+<img src="screenshort/smile.png" width="700">
 
 
 ---
@@ -56,7 +56,7 @@ Detects smiles from human faces.
 
 Converts normal images into cartoon-style images.
 
-<img src="images/cartoon.png" width="700">
+<img src="screenshort/cartoon.png" width="700">
 
 
 ---
@@ -65,7 +65,7 @@ Converts normal images into cartoon-style images.
 
 Detects edges and highlights important image features.
 
-<img src="images/canny.png" width="700">
+<img src="screenshort/canny.png" width="700">
 
 
 ---
