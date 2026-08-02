@@ -14,31 +14,30 @@ This application performs image processing tasks using OpenCV Haar Cascade Class
 
 
 ---
-
 # 📸 Application Screenshots
 
 
 ## 🏠 Home Page
 
-<img src="screenshort/homepage.png" width="700">
+<img src="screenshots/homepage.png" width="700">
 
 
 ---
 
 ## 👤 Face Detection
 
-The system detects human faces from uploaded images.
+The system detects human faces from uploaded images using OpenCV Haar Cascade.
 
-<img src="screenshort/face.png" width="700">
+<img src="screenshots/face.png" width="700">
 
 
 ---
 
 ## 👁️ Eye Detection
 
-Detects eyes from the input image using OpenCV.
+Detects eyes from the input image.
 
-<img src="screenshort/eye.png" width="700">
+<img src="screenshots/eye.png" width="700">
 
 
 ---
@@ -47,7 +46,7 @@ Detects eyes from the input image using OpenCV.
 
 Detects smiles from human faces.
 
-<img src="screenshort/smile.png" width="700">
+<img src="screenshots/smile.png" width="700">
 
 
 ---
@@ -56,21 +55,16 @@ Detects smiles from human faces.
 
 Converts normal images into cartoon-style images.
 
-<img src="screenshort/cartoon.png" width="700">
+<img src="screenshots/cartoon.png" width="700">
 
 
 ---
 
 ## ✏️ Canny Edge Detection
 
-Detects edges and highlights important image features.
+Detects edges and highlights image features.
 
-<img src="screenshort/canny.png" width="700">
-
-
----
-
-# 🛠️ Technologies Used
+<img src="screenshots/canny.png" width="700"># 🛠️ Technologies Used
 
 - Python
 - OpenCV
