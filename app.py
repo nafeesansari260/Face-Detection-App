@@ -5,18 +5,10 @@ import numpy as np
 import os
 
 
-
-print(os.getcwd())
-print(os.path.exists("frecog/haarcascade_frontalface_default.xml"))
-print(os.path.exists("frecog/haarcascade_eye.xml"))
-
-@st.cache_data
-def load_image(img):
-    im = Image.open(img)
-    return im
-
-
+import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 
 face_cascade = cv2.CascadeClassifier(
     os.path.join(BASE_DIR, "frecog", "haarcascade_frontalface_default.xml")
