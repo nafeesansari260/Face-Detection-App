@@ -5,17 +5,34 @@ import numpy as np
 import os
 
 
+
+print(os.getcwd())
+print(os.path.exists("frecog/haarcascade_frontalface_default.xml"))
+print(os.path.exists("frecog/haarcascade_eye.xml"))
+
 @st.cache_data
 def load_image(img):
     im = Image.open(img)
     return im
 
 
-face_cascade = cv2.CascadeClassifier(
-    'frecog/haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier('frecog/haarcascade_eye.xml')
-smile_cascade = cv2.CascadeClassifier('frecog/haarcascade_smile.xml')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+face_cascade = cv2.CascadeClassifier(
+    os.path.join(BASE_DIR, "frecog", "haarcascade_frontalface_default.xml")
+)
+
+eye_cascade = cv2.CascadeClassifier(
+    os.path.join(BASE_DIR, "frecog", "haarcascade_eye.xml")
+)
+
+smile_cascade = cv2.CascadeClassifier(
+    os.path.join(BASE_DIR, "frecog", "haarcascade_smile.xml")
+)
+
+print(face_cascade.empty())
+print(eye_cascade.empty())
+print(smile_cascade.empty())
 
 def detect_faces(our_image):
     new_img = np.array(our_image.convert('RGB'))
