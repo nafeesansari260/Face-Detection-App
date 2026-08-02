@@ -1,65 +1,86 @@
-# Face Detection with OpenCV Streamlit Web App
-+ Streamlit App with OpenCV
+# 😎 Face Detection with OpenCV & Streamlit Web App
 
-### How to Deploy on Heroku
-+ To deploy on heroku you will need the basic 3 requirements and a new requirement for the OpenCV
-+ This is due to the fact that opencv requires some dependencies that you need to install.
+An AI-based Face Detection Web Application built using **Python, OpenCV, and Streamlit**.
 
-### 3 Basic Requirements
-+ Procfile
-+ setup.sh
-+ requirements.txt or pipfile
+This application performs image processing tasks using OpenCV Haar Cascade Classifier.
 
-### Requirements For OpenCV
-+ Buildpack
- - To check if you have the buildpack installed you can use
-```bash
-heroku run bash
-apt --help
-```
- - If it shows the help, that means you have the buildpack for apt installed
- - If you do not have it you can use this command to install the buildpack
- ```bash
- heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt
- ```
+## 🚀 Features
 
-+ Aptfile
-- You can then include a file called Aptfile which contains the basic dependences/copy and paste into Aptfile
-```
-libsm6
-libxrender1
-libfontconfig1
-libice6
-```
-+ NB: This is the same as installing with apt on a paid account
-```bash
-apt-get install libsm6 libxrender1 libfontconfig1 libice6
-```
-
-#### Deploying
-+ Then just like before you run after adding to your repository you can push to heroku to deploy by
-```bash
-git push heroku master
-```
-
-#### Home Page
-![](screenshots/stage1.png)
-
-#### Face Detection
-![](screenshots/faces.png)
-
-#### Eyes Detection
-![](screenshots/eye-detection.png)
-
-#### Cartoonize Picture
-![](screenshots/cartoonize.png)
-
-#### Cannize Picture
-![](screenshots/cannize.png)
+✅ Face Detection  
+✅ Eye Detection  
+✅ Smile Detection  
+✅ Cartoon Image Effect  
+✅ Canny Edge Detection  
 
 
+---
 
-#### By
-+ Sagnik Mitra
-+ [Connect](https://linkedin.com/in/sagnikmitra)
+# 📸 Application Screenshots
+
+
+## 🏠 Home Page
+
+(Add your homepage screenshot here)
+
+
+---
+
+## 👤 Face Detection
+
+The system detects human faces from uploaded images.
+
+<img src="images/face.png" width="700">
+
+
+---
+
+## 👁️ Eye Detection
+
+Detects eyes from the input image using OpenCV.
+
+<img src="images/eye.png" width="700">
+
+
+---
+
+## 😁 Smile Detection
+
+Detects smiles from human faces.
+
+<img src="images/smile.png" width="700">
+
+
+---
+
+## 🎨 Cartoon Effect
+
+Converts normal images into cartoon-style images.
+
+<img src="images/cartoon.png" width="700">
+
+
+---
+
+## ✏️ Canny Edge Detection
+
+Detects edges and highlights important image features.
+
+<img src="images/canny.png" width="700">
+
+
+---
+
+# 🛠️ Technologies Used
+
+- Python
+- OpenCV
+- Streamlit
+- NumPy
+- Pillow
+- Haar Cascade Classifier
+
+
+---
+
+# 📂 Project Structure
 
