@@ -2,6 +2,7 @@ import streamlit as st
 import cv2
 from PIL import Image, ImageEnhance
 import numpy as np
+import os
 
 
 # ---------------- PAGE CONFIG ----------------
@@ -13,26 +14,68 @@ st.set_page_config(
 )
 
 
-# ---------------- LOAD HAAR CASCADE ----------------
 
-face_cascade = cv2.CascadeClassifier(
-    cv2.data.haarcascades +
+# ---------------- LOAD MODELS ----------------
+
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
+
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "models"
+)
+
+
+
+def load_cascade(filename):
+
+    path = os.path.join(
+        MODEL_PATH,
+        filename
+    )
+
+    if not os.path.exists(path):
+        st.error(
+            f"Missing file: {filename}"
+        )
+        st.stop()
+
+
+    cascade = cv2.CascadeClassifier(path)
+
+
+    if cascade.empty():
+        st.error(
+            f"Cannot load {filename}"
+        )
+        st.stop()
+
+
+    return cascade
+
+
+
+
+face_cascade = load_cascade(
     "haarcascade_frontalface_default.xml"
 )
 
-eye_cascade = cv2.CascadeClassifier(
-    cv2.data.haarcascades +
+
+eye_cascade = load_cascade(
     "haarcascade_eye.xml"
 )
 
-smile_cascade = cv2.CascadeClassifier(
-    cv2.data.haarcascades +
+
+smile_cascade = load_cascade(
     "haarcascade_smile.xml"
 )
 
 
 
-# ---------------- FUNCTIONS ----------------
+
+# ---------------- IMAGE CONVERSION ----------------
 
 
 def convert_image(image):
@@ -41,20 +84,26 @@ def convert_image(image):
         image.convert("RGB")
     )
 
+
     img = cv2.cvtColor(
         img,
         cv2.COLOR_RGB2BGR
     )
 
+
     return img
 
 
 
-# FACE DETECTION
+
+
+# ---------------- FACE DETECTION ----------------
+
 
 def detect_faces(image):
 
     img = convert_image(image)
+
 
     gray = cv2.cvtColor(
         img,
@@ -69,7 +118,7 @@ def detect_faces(image):
     )
 
 
-    for (x,y,w,h) in faces:
+    for x,y,w,h in faces:
 
         cv2.rectangle(
             img,
@@ -78,6 +127,7 @@ def detect_faces(image):
             (255,0,0),
             3
         )
+
 
         cv2.putText(
             img,
@@ -95,11 +145,14 @@ def detect_faces(image):
 
 
 
-# EYE DETECTION
+
+# ---------------- EYE DETECTION ----------------
+
 
 def detect_eyes(image):
 
     img = convert_image(image)
+
 
     gray = cv2.cvtColor(
         img,
@@ -114,7 +167,7 @@ def detect_eyes(image):
     )
 
 
-    for (x,y,w,h) in eyes:
+    for x,y,w,h in eyes:
 
         cv2.rectangle(
             img,
@@ -131,11 +184,13 @@ def detect_eyes(image):
 
 
 
-# SMILE DETECTION
+# ---------------- SMILE DETECTION ----------------
 
-def detect_smiles(image):
+
+def detect_smile(image):
 
     img = convert_image(image)
+
 
     gray = cv2.cvtColor(
         img,
@@ -150,7 +205,7 @@ def detect_smiles(image):
     )
 
 
-    for (x,y,w,h) in smiles:
+    for x,y,w,h in smiles:
 
         cv2.rectangle(
             img,
@@ -167,9 +222,10 @@ def detect_smiles(image):
 
 
 
-# CARTOON EFFECT
+# ---------------- CARTOON ----------------
 
-def cartoonize_image(image):
+
+def cartoon_effect(image):
 
     img = convert_image(image)
 
@@ -217,9 +273,10 @@ def cartoonize_image(image):
 
 
 
-# CANNY EDGE
+# ---------------- CANNY ----------------
 
-def canny_edge(image):
+
+def canny(image):
 
     img = convert_image(image)
 
@@ -243,7 +300,8 @@ def canny_edge(image):
 
 
 
-# ---------------- MAIN APP ----------------
+
+# ---------------- MAIN ----------------
 
 
 def main():
@@ -254,12 +312,13 @@ def main():
 
 
     st.write(
-        "Built with Streamlit + OpenCV"
+        "Streamlit + OpenCV + Haar Cascade"
     )
 
 
+
     menu = st.sidebar.selectbox(
-        "Select Option",
+        "Menu",
         [
             "Detection",
             "About"
@@ -271,13 +330,8 @@ def main():
     if menu=="Detection":
 
 
-        st.subheader(
-            "Upload Image"
-        )
-
-
-        image_file = st.file_uploader(
-            "Choose Image",
+        file = st.file_uploader(
+            "Upload Image",
             type=[
                 "jpg",
                 "jpeg",
@@ -286,119 +340,24 @@ def main():
         )
 
 
-
-        if image_file:
+        if file:
 
 
             image = Image.open(
-                image_file
+                file
             )
 
 
-            col1,col2 = st.columns(2)
-
-
-            with col1:
-
-                st.write(
-                    "Original Image"
-                )
-
-                st.image(
-                    image,
-                    width=300
-                )
-
-
-
-            option = st.sidebar.radio(
-                "Image Enhancement",
-                [
-                    "Original",
-                    "Gray Scale",
-                    "Contrast",
-                    "Brightness",
-                    "Blur"
-                ]
+            st.image(
+                image,
+                caption="Original Image",
+                width=350
             )
-
-
-
-            if option=="Gray Scale":
-
-                img = np.array(image)
-
-                gray = cv2.cvtColor(
-                    img,
-                    cv2.COLOR_RGB2GRAY
-                )
-
-                st.image(gray)
-
-
-
-            elif option=="Contrast":
-
-                value = st.sidebar.slider(
-                    "Contrast",
-                    0.5,
-                    3.5,
-                    1.0
-                )
-
-
-                enhancer = ImageEnhance.Contrast(
-                    image
-                )
-
-                st.image(
-                    enhancer.enhance(value)
-                )
-
-
-
-            elif option=="Brightness":
-
-                value = st.sidebar.slider(
-                    "Brightness",
-                    0.5,
-                    3.5,
-                    1.0
-                )
-
-
-                enhancer = ImageEnhance.Brightness(
-                    image
-                )
-
-
-                st.image(
-                    enhancer.enhance(value)
-                )
-
-
-
-            elif option=="Blur":
-
-                img = convert_image(
-                    image
-                )
-
-                blur = cv2.GaussianBlur(
-                    img,
-                    (11,11),
-                    0
-                )
-
-
-                st.image(
-                    blur
-                )
 
 
 
             task = st.sidebar.selectbox(
-                "Detection Type",
+                "Choose Feature",
                 [
                     "Face",
                     "Eyes",
@@ -415,6 +374,7 @@ def main():
             ):
 
 
+
                 if task=="Face":
 
                     result,count = detect_faces(
@@ -429,7 +389,7 @@ def main():
 
 
                     st.success(
-                        f"{len(count)} Face Found"
+                        f"{len(count)} Face Detected"
                     )
 
 
@@ -448,14 +408,14 @@ def main():
 
 
                     st.success(
-                        f"{len(count)} Eyes Found"
+                        f"{len(count)} Eyes Detected"
                     )
 
 
 
                 elif task=="Smile":
 
-                    result,count = detect_smiles(
+                    result,count = detect_smile(
                         image
                     )
 
@@ -467,14 +427,14 @@ def main():
 
 
                     st.success(
-                        f"{len(count)} Smile Found"
+                        f"{len(count)} Smile Detected"
                     )
 
 
 
                 elif task=="Cartoon":
 
-                    result = cartoonize_image(
+                    result = cartoon_effect(
                         image
                     )
 
@@ -488,7 +448,7 @@ def main():
 
                 elif task=="Canny":
 
-                    result = canny_edge(
+                    result = canny(
                         image
                     )
 
@@ -501,6 +461,7 @@ def main():
 
     else:
 
+
         st.subheader(
             "About Project"
         )
@@ -512,18 +473,20 @@ def main():
 
             Technologies:
             - Python
-            - Streamlit
             - OpenCV
+            - Streamlit
             - Haar Cascade
 
             Features:
             ✔ Face Detection
             ✔ Eye Detection
             ✔ Smile Detection
-            ✔ Cartoon Effect
+            ✔ Cartoon Filter
             ✔ Edge Detection
             """
         )
+
+
 
 
 
