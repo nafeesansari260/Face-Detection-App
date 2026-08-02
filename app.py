@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(
 
 MODEL_PATH = os.path.join(
     BASE_DIR,
-    "models"
+    "frecog"
 )
 
 
