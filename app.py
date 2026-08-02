@@ -1,8 +1,7 @@
 import streamlit as st
 import cv2
-from PIL import Image, ImageEnhance
+from PIL import Image
 import numpy as np
-import os
 
 
 # ---------------- PAGE CONFIG ----------------
@@ -14,68 +13,35 @@ st.set_page_config(
 )
 
 
+# ---------------- LOAD HAAR CASCADE ----------------
 
-# ---------------- LOAD MODELS ----------------
-
-BASE_DIR = os.path.dirname(
-    os.path.abspath(__file__)
-)
-
-
-MODEL_PATH = os.path.join(
-    BASE_DIR,
-    "frecog"
-)
+FACE_PATH = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+EYE_PATH = cv2.data.haarcascades + "haarcascade_eye.xml"
+SMILE_PATH = cv2.data.haarcascades + "haarcascade_smile.xml"
 
 
 
-def load_cascade(filename):
-
-    path = os.path.join(
-        MODEL_PATH,
-        filename
-    )
-
-    if not os.path.exists(path):
-        st.error(
-            f"Missing file: {filename}"
-        )
-        st.stop()
-
+def load_cascade(path):
 
     cascade = cv2.CascadeClassifier(path)
 
-
     if cascade.empty():
         st.error(
-            f"Cannot load {filename}"
+            f"Model load failed: {path}"
         )
         st.stop()
-
 
     return cascade
 
 
 
-
-face_cascade = load_cascade(
-    "haarcascade_frontalface_default.xml"
-)
-
-
-eye_cascade = load_cascade(
-    "haarcascade_eye.xml"
-)
-
-
-smile_cascade = load_cascade(
-    "haarcascade_smile.xml"
-)
+face_cascade = load_cascade(FACE_PATH)
+eye_cascade = load_cascade(EYE_PATH)
+smile_cascade = load_cascade(SMILE_PATH)
 
 
 
-
-# ---------------- IMAGE CONVERSION ----------------
+# ---------------- IMAGE CONVERT ----------------
 
 
 def convert_image(image):
@@ -84,16 +50,12 @@ def convert_image(image):
         image.convert("RGB")
     )
 
-
     img = cv2.cvtColor(
         img,
         cv2.COLOR_RGB2BGR
     )
 
-
     return img
-
-
 
 
 
@@ -103,7 +65,6 @@ def convert_image(image):
 def detect_faces(image):
 
     img = convert_image(image)
-
 
     gray = cv2.cvtColor(
         img,
@@ -140,9 +101,7 @@ def detect_faces(image):
         )
 
 
-    return img, faces
-
-
+    return img,faces
 
 
 
@@ -178,9 +137,7 @@ def detect_eyes(image):
         )
 
 
-    return img, eyes
-
-
+    return img,eyes
 
 
 
@@ -216,13 +173,11 @@ def detect_smile(image):
         )
 
 
-    return img, smiles
+    return img,smiles
 
 
 
-
-
-# ---------------- CARTOON ----------------
+# ---------------- CARTOON EFFECT ----------------
 
 
 def cartoon_effect(image):
@@ -271,8 +226,6 @@ def cartoon_effect(image):
 
 
 
-
-
 # ---------------- CANNY ----------------
 
 
@@ -299,9 +252,7 @@ def canny(image):
 
 
 
-
-
-# ---------------- MAIN ----------------
+# ---------------- MAIN APP ----------------
 
 
 def main():
@@ -312,7 +263,7 @@ def main():
 
 
     st.write(
-        "Streamlit + OpenCV + Haar Cascade"
+        "Python + OpenCV + Streamlit + Haar Cascade"
     )
 
 
@@ -340,12 +291,23 @@ def main():
         )
 
 
+        feature = st.sidebar.selectbox(
+            "Choose Feature",
+            [
+                "Face",
+                "Eyes",
+                "Smile",
+                "Cartoon",
+                "Canny"
+            ]
+        )
+
+
+
         if file:
 
 
-            image = Image.open(
-                file
-            )
+            image = Image.open(file)
 
 
             st.image(
@@ -355,89 +317,54 @@ def main():
             )
 
 
-
-            task = st.sidebar.selectbox(
-                "Choose Feature",
-                [
-                    "Face",
-                    "Eyes",
-                    "Smile",
-                    "Cartoon",
-                    "Canny"
-                ]
-            )
+            if st.button("Process"):
 
 
+                if feature=="Face":
 
-            if st.button(
-                "Process"
-            ):
-
-
-
-                if task=="Face":
-
-                    result,count = detect_faces(
-                        image
-                    )
-
+                    result,count = detect_faces(image)
 
                     st.image(
                         result,
                         channels="BGR"
                     )
-
 
                     st.success(
                         f"{len(count)} Face Detected"
                     )
 
 
+                elif feature=="Eyes":
 
-                elif task=="Eyes":
-
-                    result,count = detect_eyes(
-                        image
-                    )
-
+                    result,count = detect_eyes(image)
 
                     st.image(
                         result,
                         channels="BGR"
                     )
-
 
                     st.success(
                         f"{len(count)} Eyes Detected"
                     )
 
 
+                elif feature=="Smile":
 
-                elif task=="Smile":
-
-                    result,count = detect_smile(
-                        image
-                    )
-
+                    result,count = detect_smile(image)
 
                     st.image(
                         result,
                         channels="BGR"
                     )
-
 
                     st.success(
                         f"{len(count)} Smile Detected"
                     )
 
 
+                elif feature=="Cartoon":
 
-                elif task=="Cartoon":
-
-                    result = cartoon_effect(
-                        image
-                    )
-
+                    result = cartoon_effect(image)
 
                     st.image(
                         result,
@@ -445,13 +372,9 @@ def main():
                     )
 
 
+                elif feature=="Canny":
 
-                elif task=="Canny":
-
-                    result = canny(
-                        image
-                    )
-
+                    result = canny(image)
 
                     st.image(
                         result
@@ -475,7 +398,6 @@ def main():
             - Python
             - OpenCV
             - Streamlit
-            - Haar Cascade
 
             Features:
             ✔ Face Detection
@@ -485,8 +407,6 @@ def main():
             ✔ Edge Detection
             """
         )
-
-
 
 
 
