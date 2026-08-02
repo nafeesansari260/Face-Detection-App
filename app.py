@@ -1,11 +1,11 @@
 import streamlit as st
-from cv2 import cv2
+import cv2
 from PIL import Image, ImageEnhance
 import numpy as np
 import os
 
 
-@st.cache
+@st.cache_data
 def load_image(img):
     im = Image.open(img)
     return im
